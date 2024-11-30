@@ -1,0 +1,30 @@
+[workspace]
+members = ["crates/aoc_24"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Matt Cook <matt@mattcook.dev>"]
+description = "Advent of Code"
+readme = "README.md"
+repository = "https://github.com/sciencefidelity/aoc"
+license = "MIT or Apache-2.0"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+enum_glob_use = "deny"
+pedantic = { level = "deny", priority = 1 }
+nursery = { level = "deny", priority = 2 }
+unwrap_used = "deny"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = "symbols"
+
+[workspace.dependencies]
