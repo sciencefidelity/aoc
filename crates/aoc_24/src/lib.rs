@@ -4,4 +4,4 @@
     clippy::unwrap_used,
     clippy::missing_panics_doc
 )]
-pub mod day_1;
+pub mod day_01;

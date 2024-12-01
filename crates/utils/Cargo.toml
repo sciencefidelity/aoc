@@ -1,5 +1,5 @@
 [package]
-name = "aoc_24"
+name = "utils"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -9,7 +9,6 @@ repository.workspace = true
 license.workspace = true
 
 [dependencies]
-utils = { path = "../utils" }
 
 [lints]
 workspace = true
