@@ -55,21 +55,21 @@ mod tests {
 
     #[test]
     fn test_historian_hysteria_part_1_a() {
-        assert_eq!(historian_hysteria_part_1("data/day_1_a.txt"), 11);
+        assert_eq!(historian_hysteria_part_1("data/day_01_a.txt"), 11);
     }
 
     #[test]
     fn test_historian_hysteria_part_1_b() {
-        assert_eq!(historian_hysteria_part_1("data/day_1_b.txt"), 2_367_773);
+        assert_eq!(historian_hysteria_part_1("data/day_01_b.txt"), 2_367_773);
     }
 
     #[test]
     fn test_historian_hysteria_part_2_a() {
-        assert_eq!(historian_hysteria_part_2("data/day_1_a.txt"), 31);
+        assert_eq!(historian_hysteria_part_2("data/day_01_a.txt"), 31);
     }
 
     #[test]
     fn test_historian_hysteria_part_2_b() {
-        assert_eq!(historian_hysteria_part_2("data/day_1_b.txt"), 21_271_939);
+        assert_eq!(historian_hysteria_part_2("data/day_01_b.txt"), 21_271_939);
     }
 }
