@@ -12,7 +12,7 @@ where
             .split_whitespace()
             .map(|n| n.parse().unwrap())
             .collect();
-        safe_count += is_safe(&line) as i32;
+        safe_count += i32::from(is_safe(&line));
     }
     safe_count
 }
@@ -54,16 +54,12 @@ fn is_safe(line: &[i32]) -> bool {
     }
     let is_increasing = line[1] > line[0];
     let mut last_seen = line[0];
-    for num in line.into_iter().skip(1) {
-        if is_increasing {
-            if !(*num > last_seen && num - last_seen <= 3) {
-                return false;
-            }
+    for num in line.iter().skip(1) {
+        if is_increasing && !(*num > last_seen && num - last_seen <= 3) {
+            return false;
         }
-        if !is_increasing {
-            if !(last_seen > *num && last_seen - num <= 3) {
-                return false;
-            }
+        if !(is_increasing || last_seen > *num && last_seen - num <= 3) {
+            return false;
         }
         last_seen = *num;
     }
