@@ -8,21 +8,18 @@ where
 {
     let (rules, mut updates) = parse_file(path);
     let (mut result_a, mut result_b) = (0, 0);
-    for row in updates.iter_mut() {
+    for row in &mut updates {
         let mut is_correct = true;
         for i in 0..row.len() {
             for j in i + 1..row.len() {
-                match rules.get(&row[i]) {
-                    Some(v) => {
-                        if !v.contains(&row[j]) {
-                            is_correct = false;
-                            break;
-                        }
-                    }
-                    None => {
+                if let Some(v) = rules.get(&row[i]) {
+                    if !v.contains(&row[j]) {
                         is_correct = false;
                         break;
                     }
+                } else {
+                    is_correct = false;
+                    break;
                 }
             }
         }
@@ -65,7 +62,7 @@ where
                 line.split(',')
                     .map(|n| n.parse::<usize>().unwrap())
                     .collect::<Vec<usize>>(),
-            )
+            );
         }
     }
     (rules, updates)
