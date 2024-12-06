@@ -25,7 +25,7 @@ where
     let mut grid = parse_input(path);
     let guard_pos = find_guard_position(&grid);
     let mut route = HashSet::new();
-    simulate_a(&mut grid, guard_pos, &mut route);
+    simulate_a(&grid, guard_pos, &mut route);
     let mut count = 0;
     for pos in &route {
         let (x, y) = (pos.1 as usize, pos.0 as usize);
@@ -40,7 +40,7 @@ where
     (route.len(), count)
 }
 
-fn simulate_a(grid: &mut [Vec<u8>], mut guard_pos: Coordinates, route: &mut HashSet<Coordinates>) {
+fn simulate_a(grid: &[Vec<u8>], mut guard_pos: Coordinates, route: &mut HashSet<Coordinates>) {
     let (m, n) = (grid.len() as i32, grid[0].len() as i32);
     let mut direction = DIRECTIONS.iter().cycle();
     let mut current_direction = direction.next().unwrap();
