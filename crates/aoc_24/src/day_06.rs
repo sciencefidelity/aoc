@@ -18,45 +18,34 @@ const DIRECTIONS: &[Coordinates] = &[
     Coordinates(-1, 0),
 ];
 
-fn guard_gallivant_part_1<P>(path: P) -> usize
+fn guard_gallivant<P>(path: P) -> (usize, usize)
 where
     P: AsRef<Path>,
 {
     let mut grid = parse_input(path);
     let guard_pos = find_guard_position(&grid);
-    simulate_a(&mut grid, guard_pos);
-    count_moves(&grid)
-}
-
-fn guard_gallivant_part_2<P>(path: P) -> usize
-where
-    P: AsRef<Path>,
-{
-    let mut grid = parse_input(path);
-    let mut route = grid.clone();
-    let guard_pos = find_guard_position(&grid);
-    simulate_a(&mut route, guard_pos);
+    let mut route = HashSet::new();
+    simulate_a(&mut grid, guard_pos, &mut route);
     let mut count = 0;
-    for i in 0..grid.len() {
-        for j in 0..grid[i].len() {
-            if grid[i][j] != b'.' || route[i][j] != b'X' {
-                continue;
-            }
-            grid[i][j] = b'#';
-            let mut visited = HashSet::new();
-            simulate_b(&grid, guard_pos, &mut visited, &mut count);
-            grid[i][j] = b'.';
+    for pos in &route {
+        let (x, y) = (pos.1 as usize, pos.0 as usize);
+        if grid[x][y] != b'.' {
+            continue;
         }
+        grid[x][y] = b'#';
+        let mut visited = HashSet::new();
+        simulate_b(&grid, guard_pos, &mut visited, &mut count);
+        grid[x][y] = b'.';
     }
-    count
+    (route.len(), count)
 }
 
-fn simulate_a(grid: &mut [Vec<u8>], mut guard_pos: Coordinates) {
+fn simulate_a(grid: &mut [Vec<u8>], mut guard_pos: Coordinates, route: &mut HashSet<Coordinates>) {
     let (m, n) = (grid.len() as i32, grid[0].len() as i32);
     let mut direction = DIRECTIONS.iter().cycle();
     let mut current_direction = direction.next().unwrap();
     while !is_leaving_map(guard_pos, m, n) {
-        grid[guard_pos.1 as usize][guard_pos.0 as usize] = b'X';
+        route.insert(guard_pos);
         loop {
             let next_pos = guard_pos + *current_direction;
             if !is_leaving_map(next_pos, m, n)
@@ -105,18 +94,6 @@ const fn is_leaving_map(guard_pos: Coordinates, m: i32, n: i32) -> bool {
     guard_pos.0 < 0 || guard_pos.0 >= n || guard_pos.1 < 0 || guard_pos.1 >= m
 }
 
-fn count_moves(grid: &[Vec<u8>]) -> usize {
-    let mut count = 0;
-    for row in grid {
-        for col in row {
-            if *col == b'X' {
-                count += 1;
-            }
-        }
-    }
-    count
-}
-
 fn find_guard_position(grid: &[Vec<u8>]) -> Coordinates {
     let mut guard_pos = Coordinates(0, 0);
     for (y, row) in grid.iter().enumerate() {
@@ -159,22 +136,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_guard_gallivant_part_1_a() {
-        assert_eq!(guard_gallivant_part_1("data/day_06_a.txt"), 41);
+    fn test_guard_gallivant_a() {
+        assert_eq!(guard_gallivant("data/day_06_a.txt"), (41, 6));
     }
 
     #[test]
-    fn test_guard_gallivant_part_1_b() {
-        assert_eq!(guard_gallivant_part_1("data/day_06_b.txt"), 5030);
-    }
-
-    #[test]
-    fn test_guard_gallivant_part_2_a() {
-        assert_eq!(guard_gallivant_part_2("data/day_06_a.txt"), 6);
-    }
-
-    #[test]
-    fn test_guard_gallivant_part_2_b() {
-        assert_eq!(guard_gallivant_part_2("data/day_06_b.txt"), 1928);
+    fn test_guard_gallivant_b() {
+        assert_eq!(guard_gallivant("data/day_06_b.txt"), (5030, 1928));
     }
 }
