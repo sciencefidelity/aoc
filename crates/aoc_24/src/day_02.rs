@@ -41,7 +41,6 @@ where
                     safe_count += 1;
                     break;
                 }
-                println!("{dampened:?}");
             }
         }
     }

@@ -3,13 +3,9 @@
     clippy::cast_possible_wrap,
     clippy::cast_sign_loss
 )]
-use std::ops::{Add, AddAssign};
 use std::{collections::HashSet, path::Path};
 
-use utils::read_lines;
-
-#[derive(Copy, Clone, PartialEq, Eq, Debug, Hash)]
-struct Coordinates(i32, i32);
+use coordinates::{parse_grid, Coordinates};
 
 const DIRECTIONS: &[Coordinates] = &[
     Coordinates(0, -1),
@@ -22,7 +18,7 @@ fn guard_gallivant<P>(path: P) -> (usize, usize)
 where
     P: AsRef<Path>,
 {
-    let mut grid = parse_input(path);
+    let mut grid = parse_grid(path);
     let guard_pos = find_guard_position(&grid);
     let mut route = HashSet::new();
     simulate_a(&grid, guard_pos, &mut route);
@@ -105,30 +101,6 @@ fn find_guard_position(grid: &[Vec<u8>]) -> Coordinates {
         }
     }
     guard_pos
-}
-
-fn parse_input<P>(path: P) -> Vec<Vec<u8>>
-where
-    P: AsRef<Path>,
-{
-    read_lines(path)
-        .map_while(Result::ok)
-        .map(String::into_bytes)
-        .collect()
-}
-
-impl Add for Coordinates {
-    type Output = Self;
-    fn add(self, rhs: Self) -> Self::Output {
-        Self(self.0 + rhs.0, self.1 + rhs.1)
-    }
-}
-
-impl AddAssign for Coordinates {
-    fn add_assign(&mut self, rhs: Self) {
-        self.0 += rhs.0;
-        self.1 += rhs.1;
-    }
 }
 
 #[cfg(test)]

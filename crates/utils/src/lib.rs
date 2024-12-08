@@ -16,3 +16,11 @@ where
     let file = File::open(file).expect("failed to open file");
     io::BufReader::new(file).lines()
 }
+
+/// Print a grid or bytes
+pub fn print_grid(grid: &[Vec<u8>]) {
+    for row in grid {
+        println!("{}", String::from_utf8(row.clone()).unwrap());
+    }
+    println!();
+}
